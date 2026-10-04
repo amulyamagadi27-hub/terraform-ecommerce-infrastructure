@@ -13,11 +13,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "product_assets" {
-  bucket = "ecommerce-dev-product-assets-amulya"
+  bucket = local.bucket_name
 
-  tags = {
-    Environment = "dev"
-    Purpose     = "product-assets"
-  }
-
+  #tags = local.common_tags
 }
