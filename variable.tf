@@ -12,3 +12,8 @@ variable "environment" {
     error_message = "Environment must be dev, qa, or prod."
   }
 }
+variable "aws_region" {
+  type        = string
+  description = "AWS region"
+  default     = "ap-south-1"
+}
