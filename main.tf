@@ -41,7 +41,7 @@ resource "aws_subnet" "public" {
   }
 }
 
-resource "aws_security_group" "web" {
+resource "aws_security_group" "web_sg" {
   name        = "ecommerce-${var.environment}-web-sg"
   description = "Security group for E-Commerce web application"
   vpc_id      = aws_vpc.main.id
@@ -71,7 +71,7 @@ resource "aws_instance" "web" {
   subnet_id = aws_subnet.public.id
 
   vpc_security_group_ids = [
-    aws_security_group.web.id
+    aws_security_group.web_sg.id
   ]
 
   tags = {
