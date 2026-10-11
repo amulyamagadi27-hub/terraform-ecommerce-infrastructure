@@ -12,12 +12,6 @@ provider "aws" {
   region = "ap-south-1"
 }
 
-resource "aws_s3_bucket" "product_assets" {
-  bucket = local.bucket_name
-
-  #tags = local.common_tags
-}
-
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
 
@@ -28,9 +22,9 @@ resource "aws_vpc" "main" {
   }
 }
 resource "aws_subnet" "public" {
-  vpc_id                  = aws_vpc.main.id
-  cidr_block              = "10.0.1.0/24"
-  availability_zone       = data.aws_availability_zones.available.names[0]
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.1.0/24"
+  availability_zone = data.aws_availability_zones.available.names[0]
 
   map_public_ip_on_launch = true
 
@@ -64,7 +58,7 @@ data "aws_availability_zones" "available" {
 }
 
 resource "aws_instance" "web" {
-  count = var.web_instance_count
+  count         = var.web_instance_count
   ami           = data.aws_ssm_parameter.amazon_linux.value
   instance_type = "t3.micro"
 
@@ -75,8 +69,16 @@ resource "aws_instance" "web" {
   ]
 
   tags = {
-    Name = "ecommerce-${var.environment}-web-${count.index + 1}"
+    Name        = "ecommerce-${var.environment}-web-${count.index + 1}"
     Environment = var.environment
     Purpose     = "ecommerce-web"
   }
+}
+
+module "storage" {
+
+  source = "./modules/storage"
+
+  bucket_name = local.bucket_name
+
 }
